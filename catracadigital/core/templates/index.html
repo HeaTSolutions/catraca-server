@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h4>Funcionários</h4>
+        <a href="{% url 'core:employee-create' %}" class="waves-effect waves-light btn">Adicionar</a>
+        <div class="section">
+            <ul class="collapsible" data-collapsible="accordion">
+                {% for employee in employees %}
+                    <li>
+                        <div class="collapsible-header">
+                            <i class="material-icons">
+                                perm_identity
+                            </i>
+                            {{ employee.full_name }}
+                            <a href="#" data-name="{{ employee.full_name }}" data-id="{{ employee.pk }}"
+                               data-url="{% url 'core:employee-delete' employee.pk %}" class="secondary-content delete-employee-btn">
+                                <i class="material-icons">delete</i>
+                            </a>
+                            <a href="{% url 'core:employee-detail' employee.pk %}" class="secondary-content">
+                                <i class="material-icons">input</i>
+                            </a>
+                            <a href="{% url 'core:employee-register' employee.pk %}" class="secondary-content">
+                                <i class="material-icons">query_builder</i>
+                            </a>
+                        </div>
+
+                        <div class="collapsible-body">
+                            <ul class="collection with-header">
+                                {% for register in employee.today_registers %}
+                                    <li class="collection-header">
+                                        {{ register.time }}{% if register.registered_by_manager %}*{% endif %}
+                                        <a href="{% url 'core:register-detail' register.pk %}"
+                                           class="secondary-content">
+                                            <i class="material-icons">send</i>
+                                        </a>
+                                    </li>
+                                {% empty %}
+                                    <p>
+                                        Sem registros de ponto para hoje
+                                    </p>
+                                {% endfor %}
+                            </ul>
+
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="row">
+            (*) Ponto feito pelo gestor.
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block content_js %}
+    <script>
+        $('.delete-employee-btn').click(function (e) {
+            e.preventDefault();
+            var employee_id = $(this).attr('data-id');
+            var employee_name = $(this).attr('data-name');
+            var confirmation = confirm("Deseja mesmo remover o funcionário '" + employee_name + "'?");
+            if (confirmation) {
+                window.location = $(this).attr('data-url');
+            }
+        });
+    </script>
+{% endblock %}

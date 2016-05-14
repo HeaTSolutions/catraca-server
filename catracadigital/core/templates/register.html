@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <h5>Registro de ponto: {{ register.employee.full_name }}</h5>
+            <p>
+                Registro de ponto realizado por <b>{{ register.employee.full_name }}</b> no dia {{ register.time }}.
+            </p>
+        </div>
+
+        <div class="row">
+            <h5>Localização</h5>
+            {% if not register.registered_by_manager %}
+                <div id="map" class="center" style="height: 400px; width: 100%;"></div>
+            {% else %}
+                Ponto marcado pelo gestor do estabelecimento.
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block content_js %}
+    <script>
+        function initMap() {
+            var registerPosition = {
+                lat: {{ register.latitude|stringformat:"f" }},
+                lng: {{ register.longitude|stringformat:"f" }}
+            };
+
+            // Create a map object and specify the DOM element for display.
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: registerPosition,
+                scrollwheel: false,
+                disableDefaultUI: true,
+                zoom: 18
+            });
+
+            // Create a marker and set its position.
+            var marker = new google.maps.Marker({
+                map: map,
+                position: registerPosition,
+                title: 'Ponto marcado por {{ register.employee.full_name }}'
+            });
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZEvQscZCcvrryF5rTXeUagQDEwS-p7V4&callback=initMap"
+            async defer></script>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="section">
+            <h4>{{ employee.full_name }}</h4>
+            <h5>Horários de ponto referentes ao mês: <b>{% now 'F' %}/{% now 'Y' %}</b></h5>
+            <a href="{% url 'core:employee-report' employee.pk %}" class="waves-effect waves-light btn">Gerar PDF</a>
+        </div>
+
+        <div class="section">
+            <table>
+                <thead>
+                <tr>
+                    <th data-field="day" style="width: 25%">Dia do mês</th>
+                    <th data-field="entries">Registros de ponto</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for day in employee.grouped_month_registers %}
+                    <tr>
+                        <td>{{ day.date }}</td>
+                        <td>
+                            {% for entry in day.entries %}
+                                <div class="chip">
+                                    <a href="{% url 'core:register-detail' entry.pk %}">
+                                        {{ entry.time|date:"H:i:s" }}{% if entry.registered_by_manager %}*{% endif %}
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row">
+            (*) Ponto feito pelo gestor.
+        </div>
+
+    </div>
+{% endblock %}

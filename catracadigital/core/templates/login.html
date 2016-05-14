@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="section">
+            <h4>Login</h4>
+        </div>
+        <div class="section">
+            <form action="{% url 'core:login' %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="input-field col s6">
+                        {{ form.username }}
+                        <label for="{{ form.username.id_for_label }}">Nome do usuário</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        {{ form.password }}
+                        <label for="{{ form.password.id_for_label }}">Senha</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="submit" class="waves-effect waves-light btn">entrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

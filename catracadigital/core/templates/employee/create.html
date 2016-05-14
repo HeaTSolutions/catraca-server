@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h4>Adicionar funcionário</h4>
+
+        <div class="row">
+            <form class="col s12" action="{% url 'core:employee-create' %}" method="post">
+                {% csrf_token %}
+                {{ form.company }}
+                <div class="row">
+                    <div class="input-field col s6">
+                        {{ form.first_name }}
+                        <label for="{{ form.first_name.id_for_label }}">Nome</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        {{ form.last_name }}
+                        <label for="{{ form.last_name.id_for_label }}">Sobrenome</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        {{ form.mobile_id }}
+                        <label for="{{ form.mobile_id.id_for_label }}">ID Celular</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="reset" class="waves-effect waves-light btn red">Limpar formulário</button>
+                    <button type="submit" class="waves-effect waves-light btn">Adicionar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
